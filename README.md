@@ -1,11 +1,233 @@
 # Car REST Service
 
-### Entity Relationship Diagram
+## 🎯 Motivation & Goal
+
+The **Car REST Service** was developed with the following motivations:
+
+- **Mastering RESTful APIs**: To deepen expertise in designing and implementing REST APIs using Spring Boot, focusing on best practices for endpoints, data modeling, and CRUD operations.
+- **Training Milestone**: As part of the Foxminded training program, this project serves as a practical step toward mastering backend development.
+- **End-to-End Development**: To understand the full development lifecycle, from database design to API testing and deployment.
+
+### 🛠️ Technologies Used
+
+- **Core**: *Java 21*
+- **Frameworks**: *Spring Boot, Spring MVC, Spring Data JPA*
+- **Persistence**: *Hibernate, PostgreSQL, Flyway*
+- **Utilities**: *MapStruct, Lombok*
+- **Testing**: *JUnit 5, Mockito, Testcontainers*
+- **Build & VCS**: *Maven, Git*
+
+## 📝 Description
+
+### ❓ What is Car REST Service?
+
+Car REST Service is a RESTful API designed to manage car-related data, providing a robust and scalable backend for storing, retrieving, updating, and deleting car records. The service is built to handle structured data about cars, their models, manufacturers, and categories, based on a provided dataset (CSV file). It serves as a foundation for applications requiring car data management, such as automotive catalogs, sales platforms, or inventory systems.
+The API follows REST principles, offering endpoints for basic CRUD operations with support for pagination and sorting. It is designed with clean code practices, leveraging Spring Boot’s ecosystem for rapid development and maintainability.
+
+### 🛡️ What Problems Does It Solve?
+
+The service addresses key challenges in car data management by:
+
+- Providing a centralized API to manage car records, including their relationships with models, manufacturers, and categories.
+- Supporting paginated and sorted responses to handle large datasets efficiently.
+- Enabling seamless integration with frontends or other services through a well-defined REST interface.
+- Automating database schema management with Flyway for consistent migrations.
+
+### 🖱️ How to Use It?
+
+The API exposes endpoints for CRUD operations, adhering to REST principles. The base path is `/api/v1/cars`, and endpoints are designed to manage cars, models, and manufacturers hierarchically.
+
+| Endpoint            | Method | Description                                               |
+|---------------------|--------|-----------------------------------------------------------|
+| `/api/v1/cars`      | GET    | Retrieves a paginated list of cars with optional sorting. |
+| `/api/v1/cars/{id}` | GET    | Retrieves a car by its ID.                                |
+| `/api/v1/cars`      | POST   | Creates a new car record.                                 |
+| `/api/v1/cars`      | PATCH  | Updates an existing car record.                           |
+| `/api/v1/cars/{id}` | DELETE | Deletes a car by its ID.                                  |
+
+**Example Request**:
+
+```bash
+curl -X GET "http://localhost:8082/api/v1/cars?size=2"
+```
+
+**Example Response**:
+
+```json
+{
+  "content": [
+    {
+      "id": 1,
+      "objectId": "ZRgPP9dBMm",
+      "productionYear": 2020,
+      "model": {
+        "id": 1,
+        "name": "Q3",
+        "manufacturer": {
+          "id": 1,
+          "name": "Audi"
+        }
+      },
+      "categories": [
+        {
+          "id": 1,
+          "name": "SUV"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "objectId": "cptB1C1NSL",
+      "productionYear": 2020,
+      "model": {
+        "id": 2,
+        "name": "Malibu",
+        "manufacturer": {
+          "id": 2,
+          "name": "Chevrolet"
+        }
+      },
+      "categories": [
+        {
+          "id": 2,
+          "name": "Sedan"
+        }
+      ]
+    }
+  ],
+  "page": {
+    "size": 2,
+    "number": 0,
+    "totalElements": 9836,
+    "totalPages": 4918
+  }
+}
+```
+
+#### 🧑‍💻 Testing with Postman
+
+To simplify testing the API, a Postman collection is available with pre-configured requests for all endpoints. The collection is shared via a public link, allowing you to import it directly into Postman for seamless API exploration.
+
+- **Postman Collection**: [link](https://serhiibohdan.postman.co/workspace/Serhii-Bohdan's-Workspace~40fc1c55-4b61-429d-88d8-160986217c44/collection/45539490-ec57e876-3e7e-4664-817a-7d0569eef1d4?action=share&creator=45539490)
+
+**Note**: Ensure the application is running locally or deployed before sending requests via Postman. If you prefer, you can fork the collection in Postman to customize it for your environment.
+
+## ✨ Features
+
+- **CRUD Operations**: Full support for creating, reading, updating, and deleting car records.
+- **Pagination & Sorting**: Efficient handling of large datasets with Spring Data JPA.
+- **Data Mapping**: Automated DTO mapping with MapStruct for clean code.
+- **Database Management**: Schema migrations with Flyway, supporting both PostgreSQL and H2 databases.
+- **Testing**: Comprehensive unit tests for controllers and services using JUnit 5, Mockito, MockMvc and Testcontainers.
+
+## 🚀 Install & Run
+
+### 📋 Prerequisites
+
+- **Git**: For cloning the repository.
+- **Java 21**: Required for building and running locally.
+- **Maven**: For dependency management and building.
+- **PostgreSQL**: For the database.
+- **Docker**: Required for integration tests with Testcontainers and optional for running PostgreSQL or the application in a container.
+
+Clone the repository:
+
+```bash
+git clone https://gitlab.com/SerhiiBohdan/car-rest-service.git
+cd car-rest-service
+```
+
+### ▶️ Running the Application
+
+To run the application locally, follow these steps to set up the PostgreSQL database and then start the application.
+
+1. **Set Up PostgreSQL**
+
+    - **Option 1: Using Local PostgreSQL**
+
+        - Install PostgreSQL and create a database named `car_service`.
+
+        - Update `src/main/resources/application.yml` with your PostgreSQL credentials:
+
+          ```yml
+          spring:
+            datasource:
+              driver-class-name: org.postgresql.Driver
+              url: jdbc:postgresql://localhost:5432/car_service
+              username: your-username
+              password: your-password
+          ```
+
+    - **Option 2: Using Docker with PostgreSQL**
+
+        - Ensure Docker is running.
+
+        - Run PostgreSQL in a Docker container:
+
+          ```bash
+          docker run -d --name car-db \
+            -e POSTGRES_USER=postgres \
+            -e POSTGRES_PASSWORD=pass \
+            -e POSTGRES_DB=car_service \
+            -p 5432:5432 \
+            postgres:15.3
+          ```
+
+        - Update `src/main/resources/application.yml` to match Docker database credentials:
+
+          ```yml
+          spring:
+            datasource:
+              driver-class-name: org.postgresql.Driver
+              url: jdbc:postgresql://localhost:5432/car_service
+              username: postgres
+              password: pass
+          ```
+
+2. **Run the Application**
+
+    - Install dependencies and start the application:
+
+      ```bash
+      # For Windows
+      mvnw.cmd install
+      mvnw.cmd spring-boot:run
+      # For Linux/MacOS
+      ./mvnw install
+      ./mvnw spring-boot:run
+      ```
+
+    - Access the API at `http://localhost:8082/api/v1/cars`.
+
+## 🧪 Tests
+
+### 📋 Prerequisites
+
+- **Java 21** (JDK)
+- **Docker**
+
+Run the tests:
+
+```bash
+# For Windows
+mvnw.cmd test
+# For Linux/MacOS
+./mvnw test
+```
+
+**Note**: Integration tests utilize Testcontainers to deploy a PostgreSQL database in a Docker container, requiring the Docker daemon to be running. Unit tests, which rely on MockMvc and Mockito to mock dependencies (e.g., `CarService`), do not require a database or Docker. Ensure Docker is installed and running before executing integration tests.
+
+## 📧 Contact
+
+For questions or feedback, contact *serhii.bohdan99@gmail.com*.
+
+## 📊 Entity Relationship Diagram
 
 The entity relationship diagram below illustrates the data model used in the service, showing the relationships
 between `Car`, `Model`, `Manufacturer`, and `Category` entities. <br>
 ![entity relationship diagram](docs/car-rest-service-entity-diagram.svg) <br>
 Entities and Attributes
+
 1. **AbstractEntity** (Abstract Class)
     - **Description**: A base class providing a common identifier for all entities.
     - **Attributes**:
@@ -45,6 +267,33 @@ Entities and Attributes
 - **Model to Manufacturer**: Many-to-one (each model has one manufacturer; a manufacturer can have many models).
 - **Car to Category**: Many-to-many (a car can belong to multiple categories; a category can apply to multiple
   cars). <br>
+
+## Task 4.2 Create RestApi endpoints
+
+**Assignment:**
+
+1. Create new Spring Boot project using [Initializer](https://start.spring.io/) with dependencies:
+
+- **Spring Web** (Build web, including RESTful, applications using Spring MVC. Uses Apache Tomcat as the default
+  embedded container.)
+- **Spring Data JPA** (Persist data in SQL stores with Java Persistence API using Spring Data and Hibernate.)
+- **Flyway Migration** (Version control for your database so you can migrate from any version (incl. an empty database)
+  to the latest version of the schema.)
+- **H2 Database** or **PostgreSQL** Driver of your choice
+
+2. Create model and schema initializing SQL migration script according to your UML diagram
+3. Create JPA repositories and service layer with base CRUD operations
+4. Following best practices on RestAPI design - implement required endpoints to manage API model
+    - Implement create/update/list/delete operations for provided data
+        - manufacturers
+        - manufacturers/model
+        - manufacturers/model/year <br>
+          ex: `POST /api/v1/manufacturers/toyota/models/corolla/2001`
+    - Implement search endpoint with parameters like `manufacturer`, `model`, `minYear`, `maxYear`, `category` <br>
+      ex: `GET /api/v1/cars?manufacturer=mercedes&minYear=2005`
+    - All list endpoints should support pagination and sorting
+5. Cover controllers with tests
+6. Add additional components tests if required
 
 ## Task 4.1 Planning: Car Database
 
