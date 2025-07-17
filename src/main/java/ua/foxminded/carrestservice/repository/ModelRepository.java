@@ -31,4 +31,34 @@ public interface ModelRepository extends JpaRepository<Model, Long> {
      */
     Page<Model> findByManufacturerId(Long manufacturerId, Pageable pageable);
 
+    /**
+     * Checks if a {@link Model} entity exists with the specified ID.
+     *
+     * @param id the ID to check for existence
+     * @return {@code true} if a model with the given ID exists, {@code false} otherwise
+     */
+    boolean existsById(long id);
+
+    /**
+     * Checks if a {@link Model} entity exists with the specified manufacturer ID and name.
+     *
+     * @param manufacturerId the ID of the manufacturer
+     * @param name           the name of the model
+     * @return {@code true} if a model with the given manufacturer ID and name exists,
+     * {@code false} otherwise
+     */
+    boolean existsByManufacturerIdAndName(long manufacturerId, String name);
+
+    /**
+     * Checks if a {@link Model} entity exists with the specified manufacturer ID and name,
+     * excluding the model with the specified ID.
+     *
+     * @param manufacturerId the ID of the manufacturer
+     * @param name           the name of the model
+     * @param id             the ID to exclude from the check
+     * @return {@code true} if a model with the given manufacturer ID and name exists
+     * (excluding the specified ID), {@code false} otherwise
+     */
+    boolean existsByManufacturerIdAndNameAndIdIsNot(long manufacturerId, String name, long id);
+
 }

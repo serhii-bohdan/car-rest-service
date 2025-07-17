@@ -1,6 +1,7 @@
 package ua.foxminded.carrestservice.controller;
 
 import java.net.URI;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -72,7 +73,7 @@ public class CategoryController {
      * @return a {@link ResponseEntity} with the created {@link CategoryResponseDto} and location URI
      */
     @PostMapping
-    public ResponseEntity<CategoryResponseDto> createNewCategory(@RequestBody CategoryCreateDto createDto) {
+    public ResponseEntity<CategoryResponseDto> createNewCategory(@Valid @RequestBody CategoryCreateDto createDto) {
         CategoryResponseDto createdCategory = categoryService.save(createDto);
         URI location = URI.create(CATEGORY_LOCATION_URI.formatted(createdCategory.getId()));
         return ResponseEntity.created(location)
@@ -86,7 +87,7 @@ public class CategoryController {
      * @return a {@link ResponseEntity} with the updated {@link CategoryResponseDto}
      */
     @PutMapping
-    public ResponseEntity<CategoryResponseDto> updateCategory(@RequestBody CategoryUpdateDto updateDto) {
+    public ResponseEntity<CategoryResponseDto> updateCategory(@Valid @RequestBody CategoryUpdateDto updateDto) {
         CategoryResponseDto updatedCategory = categoryService.update(updateDto);
         return ResponseEntity.ok(updatedCategory);
     }
@@ -98,7 +99,7 @@ public class CategoryController {
      * @return a {@link ResponseEntity} with no content
      */
     @DeleteMapping("{id}")
-    public ResponseEntity<?> deleteCategoryById(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteCategoryById(@PathVariable Long id) {
         categoryService.deleteById(id);
         return ResponseEntity.noContent()
             .build();

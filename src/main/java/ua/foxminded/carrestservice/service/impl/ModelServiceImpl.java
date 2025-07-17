@@ -56,13 +56,7 @@ public class ModelServiceImpl extends AbstractService<Model, ModelCreateDto, Mod
     }
 
     /**
-     * Retrieves a paginated list of models by manufacturer ID or all models if the ID is null.
-     * Uses {@link ModelRepository} to query models and maps results to {@link ModelResponseDto}.
-     * Executes as a read-only transaction.
-     *
-     * @param manufacturerId the ID of the manufacturer to filter models, or null for all models
-     * @param pageable       the pagination and sorting configuration
-     * @return a paginated list of {@link ModelResponseDto}
+     * {@inheritDoc}
      */
     @Override
     @Transactional(readOnly = true)

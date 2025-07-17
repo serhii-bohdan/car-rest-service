@@ -2,6 +2,7 @@ package ua.foxminded.carrestservice.dto.create;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import ua.foxminded.carrestservice.util.validation.annotation.UniqueCategoryName;
 
 /**
  * Data Transfer Object (DTO) for creating a new category in the car rest service system.
@@ -29,6 +30,7 @@ public class CategoryCreateDto extends AbstractCreateDto {
     /**
      * The name of the category to be created.
      */
+    @UniqueCategoryName
     private String name;
 
 }

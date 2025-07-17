@@ -1,5 +1,7 @@
 package ua.foxminded.carrestservice.dto.update;
 
+import static ua.foxminded.carrestservice.util.validation.ValidationErrorMessages.OBJECT_ID_MANDATORY;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -28,6 +30,7 @@ public abstract class AbstractUpdateDto {
     /**
      * The unique identifier for the entity to be updated.
      */
+    @NotNull(message = OBJECT_ID_MANDATORY)
     private Long id;
 
 }

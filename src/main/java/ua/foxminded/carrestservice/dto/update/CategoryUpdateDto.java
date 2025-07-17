@@ -2,6 +2,7 @@ package ua.foxminded.carrestservice.dto.update;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import ua.foxminded.carrestservice.util.validation.annotation.UniqueCategoryName;
 
 /**
  * Data Transfer Object (DTO) for updating a category in the car rest service system.
@@ -29,6 +30,7 @@ public class CategoryUpdateDto extends AbstractUpdateDto {
     /**
      * The name of the category to be updated.
      */
+    @UniqueCategoryName
     private String name;
 
 }

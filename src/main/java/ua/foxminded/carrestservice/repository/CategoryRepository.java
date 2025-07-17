@@ -17,4 +17,13 @@ import ua.foxminded.carrestservice.entity.Category;
  */
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long> {
+
+    /**
+     * Checks if a {@link Category} entity exists with the specified name.
+     *
+     * @param name the name to check for existence
+     * @return {@code true} if a category with the given name exists, {@code false} otherwise
+     */
+    boolean existsByName(String name);
+
 }

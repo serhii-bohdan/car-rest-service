@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import ua.foxminded.carrestservice.dto.create.CarCreateDto;
+import ua.foxminded.carrestservice.dto.request.CarSearchRequestDto;
 import ua.foxminded.carrestservice.dto.response.CarResponseDto;
 import ua.foxminded.carrestservice.dto.update.CarUpdateDto;
 import ua.foxminded.carrestservice.entity.Car;
@@ -26,12 +27,14 @@ import ua.foxminded.carrestservice.entity.Car;
 public interface CarService extends BaseService<CarCreateDto, CarUpdateDto, CarResponseDto> {
 
     /**
-     * Retrieves a paginated list of cars associated with the specified model ID.
+     * Retrieves a paginated list of cars based on the specified search criteria.
+     * Uses {@link CarSearchRequestDto} to filter cars by manufacturer, model, category, and year range,
+     * with pagination and sorting provided by {@code pageable}. Executes as a read-only transaction.
      *
-     * @param modelId  the ID of the model to filter cars
-     * @param pageable the pagination and sorting configuration
-     * @return a paginated list of {@link CarResponseDto}
+     * @param carSearchRequest the {@link CarSearchRequestDto} containing search criteria
+     * @param pageable         the pagination and sorting configuration
+     * @return a {@link Page} of {@link CarResponseDto} matching the criteria
      */
-    Page<CarResponseDto> findCarsByModelId(Long modelId, @NotNull Pageable pageable);
+    Page<CarResponseDto> findCarsByCriteria(@NotNull CarSearchRequestDto carSearchRequest, @NotNull Pageable pageable);
 
 }

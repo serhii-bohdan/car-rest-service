@@ -34,7 +34,6 @@ import ua.foxminded.carrestservice.util.mapping.annotation.CarProductionYearMapp
  * @see lombok.RequiredArgsConstructor
  * @see lombok.extern.slf4j.Slf4j
  * @see org.springframework.stereotype.Component
- * @since 1.0
  */
 @Component
 @Slf4j

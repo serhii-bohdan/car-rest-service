@@ -2,6 +2,7 @@ package ua.foxminded.carrestservice.dto.create;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import ua.foxminded.carrestservice.util.validation.annotation.UniqueManufacturerName;
 
 /**
  * Data Transfer Object (DTO) for creating a new manufacturer in the car rest service system.
@@ -29,6 +30,7 @@ public class ManufacturerCreateDto extends AbstractCreateDto {
     /**
      * The name of the manufacturer to be created.
      */
+    @UniqueManufacturerName
     private String name;
 
 }
