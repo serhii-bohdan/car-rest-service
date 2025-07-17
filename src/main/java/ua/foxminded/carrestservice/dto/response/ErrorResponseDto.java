@@ -1,12 +1,13 @@
 package ua.foxminded.carrestservice.dto.response;
 
+import java.util.List;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 /**
  * Data Transfer Object (DTO) for representing error responses in the car rest service system.
- * Contains details about an HTTP error, including the reason phrase, status code, and a custom
- * message. Uses Lombok {@code @Getter} annotation to generate getter methods for all fields.
+ * Contains details about an HTTP error, including the reason phrase, status code, and a list of
+ * error messages. Uses Lombok {@code @Getter} annotation to generate getter methods for all fields.
  *
  * @author Serhii Bohdan
  * @see org.springframework.http.HttpStatus
@@ -26,20 +27,20 @@ public class ErrorResponseDto {
     private final Integer statusCode;
 
     /**
-     * A custom message describing the error.
+     * A list of error messages describing the issues encountered.
      */
-    private final String message;
+    private final List<String> errors;
 
     /**
-     * Constructs an {@code ErrorResponseDto} with the specified HTTP status and message.
+     * Constructs an {@code ErrorResponseDto} with the specified HTTP status and list of errors.
      *
-     * @param httpStatus the {@link HttpStatus} providing the reason phrase and status code
-     * @param message    the custom error message
+     * @param httpStatus the {@link HttpStatus} containing the status code and reason phrase
+     * @param errors     the list of error messages
      */
-    public ErrorResponseDto(HttpStatus httpStatus, String message) {
+    public ErrorResponseDto(HttpStatus httpStatus, List<String> errors) {
         this.reasonPhrase = httpStatus.getReasonPhrase();
         this.statusCode = httpStatus.value();
-        this.message = message;
+        this.errors = errors;
     }
 
 }

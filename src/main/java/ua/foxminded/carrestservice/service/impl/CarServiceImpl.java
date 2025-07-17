@@ -4,17 +4,20 @@ import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import ua.foxminded.carrestservice.dto.create.CarCreateDto;
+import ua.foxminded.carrestservice.dto.request.CarSearchRequestDto;
 import ua.foxminded.carrestservice.dto.response.CarResponseDto;
 import ua.foxminded.carrestservice.dto.update.CarUpdateDto;
 import ua.foxminded.carrestservice.entity.Car;
 import ua.foxminded.carrestservice.mapper.BaseMapper;
 import ua.foxminded.carrestservice.repository.CarRepository;
 import ua.foxminded.carrestservice.service.CarService;
+import ua.foxminded.carrestservice.util.specification.CarSpecification;
 
 /**
  * Service implementation for managing {@link Car} entities in the car rest service system.
@@ -55,34 +58,45 @@ public class CarServiceImpl extends AbstractService<Car, CarCreateDto, CarUpdate
     }
 
     /**
-     * Retrieves a paginated list of cars by model ID or all cars if the ID is null.
-     * Uses {@link CarRepository} to query cars and maps results to {@link CarResponseDto}.
-     * Executes as a read-only transaction.
-     *
-     * @param modelId  the ID of the model to filter cars, or null for all cars
-     * @param pageable the pagination and sorting configuration
-     * @return a paginated list of {@link CarResponseDto}
+     * {@inheritDoc}
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<CarResponseDto> findCarsByModelId(Long modelId, Pageable pageable) {
-        log.info("Fetching cars by modelId: {}, pagination: page={}, size={}, sort={}",
-            modelId != null ? modelId : "all", pageable.getPageNumber(), pageable.getPageSize(),
-            pageable.getSort());
-        Page<Car> carsPage = Objects.isNull(modelId)
-            ? carRepository.findAll(pageable)
-            : carRepository.findByModelId(modelId, pageable);
+    public Page<CarResponseDto> findCarsByCriteria(CarSearchRequestDto carSearchRequest, Pageable pageable) {
+        log.info("Filtering cars with parameters: {}", carSearchRequest);
+        Specification<Car> specification = buildSpecification(carSearchRequest);
+        return carRepository.findAll(specification, pageable).map(mapper::toResponseDto);
+    }
 
-        if (carsPage.isEmpty()) {
-            log.debug("No cars found for modelId: {}, page: {}, size: {}",
-                modelId != null ? modelId : "all", pageable.getPageNumber(), pageable.getPageSize());
-        } else {
-            log.debug("Retrieved {} cars on page {} of {} for modelId: {}, total elements: {}",
-                carsPage.getContent().size(), pageable.getPageNumber(),
-                carsPage.getTotalPages(), modelId != null ? modelId : "all", carsPage.getTotalElements());
+    private Specification<Car> buildSpecification(CarSearchRequestDto carSearchRequest) {
+        Specification<Car> specification = (root, query, criteriaBuilder) -> null;
+        String manufacturer = carSearchRequest.getManufacturer();
+        String model = carSearchRequest.getModel();
+        String category = carSearchRequest.getCategory();
+        Integer minYear = carSearchRequest.getMinYear();
+        Integer maxYear = carSearchRequest.getMaxYear();
+
+        if (Objects.nonNull(manufacturer)) {
+            specification = specification.and(CarSpecification.withManufacturer(manufacturer));
+        }
+        if (Objects.nonNull(model)) {
+            specification = specification.and(CarSpecification.withModel(model));
+        }
+        if (Objects.nonNull(category)) {
+            specification = specification.and(CarSpecification.withCategory(category));
+        }
+        if (Objects.nonNull(minYear) && Objects.isNull(maxYear)) {
+            specification = specification.and(CarSpecification.withProductionYearGreaterThanOrEqual(minYear));
+        }
+        if (Objects.isNull(minYear) && Objects.nonNull(maxYear)) {
+            specification = specification.and(CarSpecification.withProductionYearLessThanOrEqual(maxYear));
+        }
+        if (Objects.nonNull(minYear) && Objects.nonNull(maxYear)) {
+            specification = specification.and(CarSpecification.withProductionYearBetween(minYear, maxYear));
         }
 
-        return carsPage.map(mapper::toResponseDto);
+        log.debug("Specification built: {}", specification);
+        return specification;
     }
 
 }

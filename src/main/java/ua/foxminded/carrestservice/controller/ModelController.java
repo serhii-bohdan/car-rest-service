@@ -1,6 +1,7 @@
 package ua.foxminded.carrestservice.controller;
 
 import java.net.URI;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -75,7 +76,7 @@ public class ModelController {
      * @return a {@link ResponseEntity} with the created {@link ModelResponseDto} and location URI
      */
     @PostMapping
-    public ResponseEntity<ModelResponseDto> createNewModel(@RequestBody ModelCreateDto createDto) {
+    public ResponseEntity<ModelResponseDto> createNewModel(@Valid @RequestBody ModelCreateDto createDto) {
         ModelResponseDto createdModel = modelService.save(createDto);
         URI location = URI.create(MODEL_LOCATION_URI.formatted(createdModel.getId()));
         return ResponseEntity.created(location)
@@ -89,7 +90,7 @@ public class ModelController {
      * @return a {@link ResponseEntity} with the updated {@link ModelResponseDto}
      */
     @PutMapping
-    public ResponseEntity<ModelResponseDto> updateModel(@RequestBody ModelUpdateDto updateDto) {
+    public ResponseEntity<ModelResponseDto> updateModel(@Valid @RequestBody ModelUpdateDto updateDto) {
         ModelResponseDto updatedModel = modelService.update(updateDto);
         return ResponseEntity.ok(updatedModel);
     }
@@ -101,7 +102,7 @@ public class ModelController {
      * @return a {@link ResponseEntity} with no content
      */
     @DeleteMapping("{id}")
-    public ResponseEntity<?> deleteModelById(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteModelById(@PathVariable Long id) {
         modelService.deleteById(id);
         return ResponseEntity.noContent()
             .build();

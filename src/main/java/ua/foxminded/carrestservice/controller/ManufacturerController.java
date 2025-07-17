@@ -1,6 +1,7 @@
 package ua.foxminded.carrestservice.controller;
 
 import java.net.URI;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -73,7 +74,7 @@ public class ManufacturerController {
      * @return a {@link ResponseEntity} with the created {@link ManufacturerResponseDto} and location URI
      */
     @PostMapping
-    public ResponseEntity<ManufacturerResponseDto> createNewManufacturer(@RequestBody ManufacturerCreateDto createDto) {
+    public ResponseEntity<ManufacturerResponseDto> createNewManufacturer(@Valid @RequestBody ManufacturerCreateDto createDto) {
         ManufacturerResponseDto createdManufacturer = manufacturerService.save(createDto);
         URI location = URI.create(MANUFACTURER_LOCATION_URI.formatted(createdManufacturer.getId()));
         return ResponseEntity.created(location)
@@ -87,7 +88,7 @@ public class ManufacturerController {
      * @return a {@link ResponseEntity} with the updated {@link ManufacturerResponseDto}
      */
     @PutMapping
-    public ResponseEntity<ManufacturerResponseDto> updateManufacturer(@RequestBody ManufacturerUpdateDto updateDto) {
+    public ResponseEntity<ManufacturerResponseDto> updateManufacturer(@Valid @RequestBody ManufacturerUpdateDto updateDto) {
         ManufacturerResponseDto updatedManufacturer = manufacturerService.update(updateDto);
         return ResponseEntity.ok(updatedManufacturer);
     }
@@ -99,7 +100,7 @@ public class ManufacturerController {
      * @return a {@link ResponseEntity} with no content
      */
     @DeleteMapping("{id}")
-    public ResponseEntity<?> deleteManufacturerById(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteManufacturerById(@PathVariable Long id) {
         manufacturerService.deleteById(id);
         return ResponseEntity.noContent()
             .build();

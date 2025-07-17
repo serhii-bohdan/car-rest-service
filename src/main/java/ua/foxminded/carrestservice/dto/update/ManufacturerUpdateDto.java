@@ -2,6 +2,7 @@ package ua.foxminded.carrestservice.dto.update;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import ua.foxminded.carrestservice.util.validation.annotation.UniqueManufacturerName;
 
 /**
  * Data Transfer Object (DTO) for updating a manufacturer in the car rest service system.
@@ -29,6 +30,7 @@ public class ManufacturerUpdateDto extends AbstractUpdateDto {
     /**
      * The name of the manufacturer to be updated.
      */
+    @UniqueManufacturerName
     private String name;
 
 }

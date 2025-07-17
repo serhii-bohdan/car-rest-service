@@ -13,3 +13,11 @@ spring:
 
   jpa:
     open-in-view: false
+    show-sql: true
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://dev-daubxi5a4rxojbok.us.auth0.com/
+          audiences: https://car-service-api.dev
