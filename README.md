@@ -15,6 +15,7 @@ deployment.
 - **Frameworks**: *Spring Boot, Spring MVC, Spring Data JPA*
 - **Persistence**: *Hibernate, PostgreSQL, Flyway*
 - **Security**: *Auth0*
+- **API Documentation**: *OpenApi*
 - **Utilities**: *MapStruct, Lombok*
 - **Testing**: *JUnit 5, Mockito, Testcontainers*
 - **Build & VCS**: *Maven, Git*
@@ -155,76 +156,16 @@ For detailed guidance, refer to these resources:
 - [Auth0 Quickstart for Spring Boot](https://auth0.com/docs/quickstart/backend/java-spring-security5/01-authorization)
 - [Configuring Machine-to-Machine Applications](https://auth0.com/docs/get-started/auth0-overview/create-applications/machine-to-machine-apps)
 
-### 🖱️ Testing with curl
-The API exposes endpoints for CRUD operations, adhering to REST principles. The base path is `/api/v1/cars`, and
-endpoints are designed to manage cars, models, and manufacturers hierarchically.
+### 🖱️ Testing with Swagger
+The API can be tested using the Swagger UI interface available at [http://localhost:8082/swagger-ui/index.html](http://localhost:8082/swagger-ui/index.html).
+The full API specification in JSON format is accessible at [http://localhost:8082/v3/api-docs](http://localhost:8082/v3/api-docs). The Swagger UI provides an interactive interface to explore and test all available endpoints, including those for managing cars, models, and manufacturers.
 
-| Endpoint            | Method | Description                                               |
-|---------------------|--------|-----------------------------------------------------------|
-| `/api/v1/cars`      | GET    | Retrieves a paginated list of cars with optional sorting. |
-| `/api/v1/cars/{id}` | GET    | Retrieves a car by its ID.                                |
-| `/api/v1/cars`      | POST   | Creates a new car record.                                 |
-| `/api/v1/cars`      | PATCH  | Updates an existing car record.                           |
-| `/api/v1/cars/{id}` | DELETE | Deletes a car by its ID.                                  |
-
-**Example Request**:
-
-```bash
-curl -X GET "http://localhost:8082/api/v1/cars?size=2"
-```
-
-**Example Response**:
-
-```json
-{
-  "content": [
-    {
-      "id": 1,
-      "objectId": "ZRgPP9dBMm",
-      "productionYear": 2020,
-      "model": {
-        "id": 1,
-        "name": "Q3",
-        "manufacturer": {
-          "id": 1,
-          "name": "Audi"
-        }
-      },
-      "categories": [
-        {
-          "id": 1,
-          "name": "SUV"
-        }
-      ]
-    },
-    {
-      "id": 2,
-      "objectId": "cptB1C1NSL",
-      "productionYear": 2020,
-      "model": {
-        "id": 2,
-        "name": "Malibu",
-        "manufacturer": {
-          "id": 2,
-          "name": "Chevrolet"
-        }
-      },
-      "categories": [
-        {
-          "id": 2,
-          "name": "Sedan"
-        }
-      ]
-    }
-  ],
-  "page": {
-    "size": 2,
-    "number": 0,
-    "totalElements": 9836,
-    "totalPages": 4918
-  }
-}
-```
+For endpoints requiring authentication (POST, PATCH, DELETE), a **Bearer Access Token** is needed. To obtain the token:
+1. Use the **GET /api/v1/security-test/token** endpoint, which is publicly accessible and does not require
+authentication. This endpoint returns an OAuth access token.
+2. Copy the `accessToken` from the response.
+3. In the Swagger UI, click the **Authorize** button (typically located at the top-right of the page) and paste the
+token into the provided field to authenticate requests to protected endpoints.
 
 ### 🧑‍💻 Testing with Postman
 To simplify testing the API, a Postman collection is available with pre-configured requests for all endpoints. The
@@ -306,6 +247,14 @@ Entities and Attributes
 - **Model to Manufacturer**: Many-to-one (each model has one manufacturer; a manufacturer can have many models).
 - **Car to Category**: Many-to-many (a car can belong to multiple categories; a category can apply to multiple
   cars). <br>
+
+## Task 4.4 OpenApi V3
+**Assignment:**
+
+1. Add [SpringDocV2](https://springdoc.org/) to your project.
+2. Annotate classes with [OpenApi annotations](https://www.baeldung.com/spring-rest-openapi-documentation)
+3. [Make sure](https://stackoverflow.com/questions/59898874/enable-authorize-button-in-springdoc-openapi-ui-for-bearer-token-authentication/59898875#59898875) that generated spec includes your JWT security scheme
+4. Additionally, export and submit your latest Postman collection, put it into `docs/`
 
 ## Task 4.3 Adding Security
 **Assignment:**

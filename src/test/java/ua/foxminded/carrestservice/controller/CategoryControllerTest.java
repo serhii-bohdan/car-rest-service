@@ -94,7 +94,7 @@ class CategoryControllerTest {
     void getCategoryById_shouldReturnDtoWithErrorDescription_whenCategoryServiceThrowEntityNotFoundException() throws Exception {
         Long categoryId = 1L;
         HttpStatus httpStatus = HttpStatus.NOT_FOUND;
-        when(categoryServiceMock.getById(categoryId)).thenThrow(new EntityNotFoundException(httpStatus, ERROR_MESSAGE));
+        when(categoryServiceMock.getById(categoryId)).thenThrow(new EntityNotFoundException(ERROR_MESSAGE));
 
         mockMvc.perform(get("/api/v1/categories/{id}", categoryId)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -209,7 +209,7 @@ class CategoryControllerTest {
             .name(categoryName)
             .build();
         when(categoryRepositoryMock.existsByName(categoryName)).thenReturn(false);
-        when(categoryServiceMock.update(any(CategoryUpdateDto.class))).thenThrow(new EntityNotFoundException(httpStatus, ERROR_MESSAGE));
+        when(categoryServiceMock.update(any(CategoryUpdateDto.class))).thenThrow(new EntityNotFoundException(ERROR_MESSAGE));
 
         mockMvc.perform(put("/api/v1/categories")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -239,7 +239,7 @@ class CategoryControllerTest {
     void deleteCategoryById_shouldReturnDtoWithErrorDescription_whenCategoryServiceThrowEntityNotFoundException() throws Exception {
         Long categoryId = 1L;
         HttpStatus httpStatus = HttpStatus.NOT_FOUND;
-        doThrow(new EntityNotFoundException(httpStatus, ERROR_MESSAGE)).when(categoryServiceMock).deleteById(categoryId);
+        doThrow(new EntityNotFoundException(ERROR_MESSAGE)).when(categoryServiceMock).deleteById(categoryId);
 
         mockMvc.perform(delete("/api/v1/categories/{id}", categoryId)
                 .contentType(MediaType.APPLICATION_JSON)

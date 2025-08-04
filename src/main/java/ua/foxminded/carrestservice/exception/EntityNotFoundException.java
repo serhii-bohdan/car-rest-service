@@ -18,13 +18,13 @@ import org.springframework.http.HttpStatus;
 public class EntityNotFoundException extends AbstractCustomException {
 
     /**
-     * Constructs an {@code EntityNotFoundException} with the specified HTTP status and message.
+     * Constructs a new {@code EntityNotFoundException} with the specified message.
+     * Sets the HTTP status code to {@link HttpStatus#NOT_FOUND} (404).
      *
-     * @param httpStatus the {@link HttpStatus} for the exception, typically {@code NOT_FOUND}
-     * @param message    the detail message describing the missing entity
+     * @param message the detail message explaining why the entity was not found
      */
-    public EntityNotFoundException(HttpStatus httpStatus, String message) {
-        super(httpStatus, message);
+    public EntityNotFoundException(String message) {
+        super(HttpStatus.NOT_FOUND, message);
     }
 
 }

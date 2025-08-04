@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import ua.foxminded.carrestservice.dto.create.AbstractCreateDto;
 import ua.foxminded.carrestservice.dto.response.AbstractResponseDto;
@@ -94,7 +93,7 @@ public abstract class AbstractService<E extends AbstractEntity, C extends Abstra
                 return mapper.toResponseDto(entity);
             }).orElseThrow(() -> {
                 log.error("Entity with id {} not found", id);
-                return new EntityNotFoundException(HttpStatus.NOT_FOUND, ENTITY_NOT_FOUND_MESSAGE.formatted(id));
+                return new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE.formatted(id));
             });
     }
 
@@ -145,7 +144,7 @@ public abstract class AbstractService<E extends AbstractEntity, C extends Abstra
             return mapper.toResponseDto(updatedEntity);
         }).orElseThrow(() -> {
             log.error("Entity with ID {} not found for update", dto.getId());
-            return new EntityNotFoundException(HttpStatus.NOT_FOUND, ENTITY_NOT_FOUND_MESSAGE.formatted(dto.getId()));
+            return new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE.formatted(dto.getId()));
         });
     }
 
@@ -165,7 +164,7 @@ public abstract class AbstractService<E extends AbstractEntity, C extends Abstra
             log.debug("Entity with ID {} deleted successfully", id);
         }, () -> {
             log.error("Entity with id {} not found for deletion", id);
-            throw new EntityNotFoundException(HttpStatus.NOT_FOUND, ENTITY_NOT_FOUND_MESSAGE.formatted(id));
+            throw new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE.formatted(id));
         });
     }
 
