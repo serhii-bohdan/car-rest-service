@@ -161,7 +161,7 @@ class CarControllerTest {
     void getCarById_shouldReturnDtoWithErrorDescription_whenCarServiceThrowEntityNotFoundException() throws Exception {
         Long carId = 1L;
         HttpStatus httpStatus = HttpStatus.NOT_FOUND;
-        when(carServiceMock.getById(carId)).thenThrow(new EntityNotFoundException(httpStatus, ERROR_MESSAGE));
+        when(carServiceMock.getById(carId)).thenThrow(new EntityNotFoundException(ERROR_MESSAGE));
 
         mockMvc.perform(get("/api/v1/cars/{id}", carId)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -360,7 +360,7 @@ class CarControllerTest {
             .build();
         when(modelRepositoryMock.existsById(modelId)).thenReturn(true);
         when(categoryRepositoryMock.findAll()).thenReturn(List.of(Category.builder().id(categoryId).build()));
-        when(carServiceMock.update(any(CarUpdateDto.class))).thenThrow(new EntityNotFoundException(httpStatus, ERROR_MESSAGE));
+        when(carServiceMock.update(any(CarUpdateDto.class))).thenThrow(new EntityNotFoundException(ERROR_MESSAGE));
 
         mockMvc.perform(put("/api/v1/cars")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -390,7 +390,7 @@ class CarControllerTest {
     void deleteCarById_shouldReturnDtoWithErrorDescription_whenCarServiceThrowEntityNotFoundException() throws Exception {
         Long carId = 1L;
         HttpStatus httpStatus = HttpStatus.NOT_FOUND;
-        doThrow(new EntityNotFoundException(httpStatus, ERROR_MESSAGE)).when(carServiceMock).deleteById(carId);
+        doThrow(new EntityNotFoundException(ERROR_MESSAGE)).when(carServiceMock).deleteById(carId);
 
         mockMvc.perform(delete("/api/v1/cars/{id}", carId)
                 .contentType(MediaType.APPLICATION_JSON)

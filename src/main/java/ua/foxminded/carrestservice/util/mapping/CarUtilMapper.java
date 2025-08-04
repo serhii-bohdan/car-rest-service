@@ -7,7 +7,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import ua.foxminded.carrestservice.entity.Car;
 import ua.foxminded.carrestservice.entity.Category;
@@ -110,10 +109,10 @@ public class CarUtilMapper {
             String truncatedUuid = uuid.substring(0, OBJECT_ID_LENGTH);
             log.debug("Truncated UUID to {}: {}", OBJECT_ID_LENGTH, truncatedUuid);
             return truncatedUuid;
-        } else {
-            log.warn("Generated UUID length {} is less than {}, retrying", uuid.length(), OBJECT_ID_LENGTH);
-            return generateRandomUuidWithFixedLength();
         }
+
+        log.warn("Generated UUID length {} is less than {}, retrying", uuid.length(), OBJECT_ID_LENGTH);
+        return generateRandomUuidWithFixedLength();
     }
 
     /**
@@ -131,6 +130,7 @@ public class CarUtilMapper {
             log.warn("productionYear is null, returning null");
             return null;
         }
+
         Year year = Year.of(productionYear);
         log.debug("Converted to Year: {}", year);
         return year;
@@ -176,7 +176,7 @@ public class CarUtilMapper {
         return categoryIds.stream()
             .map(id -> categoryRepository.findById(id).orElseThrow(() -> {
                 log.error("Category with ID {} not found", id);
-                return new EntityNotFoundException(HttpStatus.NOT_FOUND, CATEGORY_NOT_FOUND_MESSAGE.formatted(id));
+                return new EntityNotFoundException(CATEGORY_NOT_FOUND_MESSAGE.formatted(id));
             }))
             .collect(Collectors.toSet());
     }

@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import ua.foxminded.carrestservice.util.security.OAuth2ClientProperties;
 
 /**
  * Configuration class for Spring Security in the car rest service system.
@@ -45,6 +46,19 @@ public class SecurityConfig {
             .sessionManagement(configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .csrf(CsrfConfigurer::disable)
             .build();
+    }
+
+    /**
+     * Creates and configures a bean for OAuth2 client properties.
+     * Provides an instance of {@link OAuth2ClientProperties} containing configuration details
+     * such as token access URL, client ID, client secret, audience, and grant type, used for
+     * OAuth2 authentication in the car rest service system.
+     *
+     * @return a configured {@link OAuth2ClientProperties} instance
+     */
+    @Bean
+    public OAuth2ClientProperties oAuth2ClientProperties() {
+        return new OAuth2ClientProperties();
     }
 
 }

@@ -1,4 +1,4 @@
-package ua.foxminded.carrestservice.util.specification;
+package ua.foxminded.carrestservice.service.impl;
 
 import org.springframework.data.jpa.domain.Specification;
 import ua.foxminded.carrestservice.entity.Car;

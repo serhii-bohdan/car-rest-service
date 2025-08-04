@@ -94,7 +94,7 @@ class ManufacturerControllerTest {
     void getManufacturerById_shouldReturnDtoWithErrorDescription_whenManufacturerServiceThrowEntityNotFoundException() throws Exception {
         Long manufacturerId = 1L;
         HttpStatus httpStatus = HttpStatus.NOT_FOUND;
-        when(manufacturerServiceMock.getById(manufacturerId)).thenThrow(new EntityNotFoundException(httpStatus, ERROR_MESSAGE));
+        when(manufacturerServiceMock.getById(manufacturerId)).thenThrow(new EntityNotFoundException(ERROR_MESSAGE));
 
         mockMvc.perform(get("/api/v1/manufacturers/{id}", manufacturerId)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -209,7 +209,7 @@ class ManufacturerControllerTest {
             .name(manufacturerName)
             .build();
         when(manufacturerRepositoryMock.existsByName(manufacturerName)).thenReturn(false);
-        when(manufacturerServiceMock.update(any(ManufacturerUpdateDto.class))).thenThrow(new EntityNotFoundException(httpStatus, ERROR_MESSAGE));
+        when(manufacturerServiceMock.update(any(ManufacturerUpdateDto.class))).thenThrow(new EntityNotFoundException(ERROR_MESSAGE));
 
         mockMvc.perform(put("/api/v1/manufacturers")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -239,7 +239,7 @@ class ManufacturerControllerTest {
     void deleteManufacturerById_shouldReturnDtoWithErrorDescription_whenManufacturerServiceThrowEntityNotFoundException() throws Exception {
         Long manufacturerId = 1L;
         HttpStatus httpStatus = HttpStatus.NOT_FOUND;
-        doThrow(new EntityNotFoundException(httpStatus, ERROR_MESSAGE)).when(manufacturerServiceMock).deleteById(manufacturerId);
+        doThrow(new EntityNotFoundException(ERROR_MESSAGE)).when(manufacturerServiceMock).deleteById(manufacturerId);
 
         mockMvc.perform(delete("/api/v1/manufacturers/{id}", manufacturerId)
                 .contentType(MediaType.APPLICATION_JSON)

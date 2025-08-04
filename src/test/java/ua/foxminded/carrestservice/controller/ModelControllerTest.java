@@ -132,7 +132,7 @@ class ModelControllerTest {
     void getModelById_shouldReturnDtoWithErrorDescription_whenModelServiceThrowEntityNotFoundException() throws Exception {
         Long modelId = 1L;
         HttpStatus httpStatus = HttpStatus.NOT_FOUND;
-        when(modelServiceMock.getById(modelId)).thenThrow(new EntityNotFoundException(httpStatus, ERROR_MESSAGE));
+        when(modelServiceMock.getById(modelId)).thenThrow(new EntityNotFoundException(ERROR_MESSAGE));
 
         mockMvc.perform(get("/api/v1/models/{id}", modelId)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -275,7 +275,7 @@ class ModelControllerTest {
             .build();
         when(manufacturerRepositoryMock.existsById(manufacturerId)).thenReturn(true);
         when(modelRepositoryMock.existsByManufacturerIdAndNameAndIdIsNot(manufacturerId, modelName, modelId)).thenReturn(false);
-        when(modelServiceMock.update(any(ModelUpdateDto.class))).thenThrow(new EntityNotFoundException(httpStatus, ERROR_MESSAGE));
+        when(modelServiceMock.update(any(ModelUpdateDto.class))).thenThrow(new EntityNotFoundException(ERROR_MESSAGE));
 
         mockMvc.perform(put("/api/v1/models")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -305,7 +305,7 @@ class ModelControllerTest {
     void deleteModelById_shouldReturnDtoWithErrorDescription_whenModelServiceThrowEntityNotFoundException() throws Exception {
         Long modelId = 1L;
         HttpStatus httpStatus = HttpStatus.NOT_FOUND;
-        doThrow(new EntityNotFoundException(httpStatus, ERROR_MESSAGE)).when(modelServiceMock).deleteById(modelId);
+        doThrow(new EntityNotFoundException(ERROR_MESSAGE)).when(modelServiceMock).deleteById(modelId);
 
         mockMvc.perform(delete("/api/v1/models/{id}", modelId)
                 .contentType(MediaType.APPLICATION_JSON)

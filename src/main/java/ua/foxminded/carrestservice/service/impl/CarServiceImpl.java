@@ -17,7 +17,6 @@ import ua.foxminded.carrestservice.entity.Car;
 import ua.foxminded.carrestservice.mapper.BaseMapper;
 import ua.foxminded.carrestservice.repository.CarRepository;
 import ua.foxminded.carrestservice.service.CarService;
-import ua.foxminded.carrestservice.util.specification.CarSpecification;
 
 /**
  * Service implementation for managing {@link Car} entities in the car rest service system.
