@@ -18,7 +18,7 @@ deployment.
 - **API Documentation**: *OpenApi*
 - **Utilities**: *MapStruct, Lombok*
 - **Testing**: *JUnit 5, Mockito, Testcontainers*
-- **Build & VCS**: *Maven, Git*
+- **Build & VCS**: *Maven, Git, Docker*
 
 ## 📝 Description
 
@@ -53,8 +53,9 @@ and categories.
 - **Git**: For cloning the repository.
 - **Java 21**: Required for building and running locally.
 - **PostgreSQL**: For the database.
-- **Docker**: Required for integration tests with Testcontainers and optional for running PostgreSQL or the
-  application in a container.
+- **Docker**: Required for integration tests with Testcontainers and optional for running PostgreSQL or the application
+in a container.
+
 
 Clone the repository:
 
@@ -64,66 +65,73 @@ cd car-rest-service
 ```
 
 ### ▶️ Running the Application
-To run the application locally, follow these steps to set up the PostgreSQL database and then start the application.
-For POST, PATCH, and DELETE requests, a Bearer Access Token is required, which can be obtained via the authentication
-request in the **Authentication** folder of the Postman collection. The token is automatically set for these requests
-using a Collection Variable.
 
-1. **Set Up PostgreSQL**
-
-    - **Option 1: Using Local PostgreSQL**
-
-        - Install PostgreSQL and create a database named `car_service`.
-
-        - Update `src/main/resources/application.yml` with your PostgreSQL credentials:
-
-          ```yml
-          spring:
-            datasource:
-              driver-class-name: org.postgresql.Driver
-              url: jdbc:postgresql://localhost:5432/car_service
-              username: your-username
-              password: your-password
-          ```
-
-    - **Option 2: Using Docker with PostgreSQL**
-
-        - Ensure Docker is running.
-
-        - Run PostgreSQL in a Docker container:
-
-          ```bash
-          docker run -d --name car-db \
-            -e POSTGRES_USER=postgres \
-            -e POSTGRES_PASSWORD=pass \
-            -e POSTGRES_DB=car_service \
-            -p 5432:5432 \
-            postgres:15.3
-          ```
-
-        - Update `src/main/resources/application.yml` to match Docker database credentials:
-
-          ```yml
-          spring:
-            datasource:
-              driver-class-name: org.postgresql.Driver
-              url: jdbc:postgresql://localhost:5432/car_service
-              username: postgres
-              password: pass
-          ```
-
-2. **Run the Application**
-
-    - Install dependencies and start the application:
-
+1. **Using Docker Compose**
+    - Ensure Docker and Docker Compose are installed.
+    - Run the application and PostgreSQL using Docker Compose:
       ```bash
-      # For Windows
-      mvnw.cmd install
-      mvnw.cmd spring-boot:run
-      # For Linux/MacOS
-      ./mvnw install
-      ./mvnw spring-boot:run
+      docker compose up -d
       ```
+
+    - The application will be available at `http://localhost:8082`. The PostgreSQL database runs in a separate
+      container, and the application connects to it automatically.
+    - To stop the application and database:
+      ```bash
+      docker compose down
+      ```
+
+    - To stop and remove volumes (including database data):
+      ```bash
+      docker compose down -v
+      ```
+
+2. **Using Maven**
+
+    - **Set Up PostgreSQL**
+        - **Option 1: Using Local PostgreSQL**
+            - Install PostgreSQL and create a database named `car_service`.
+            - Update `src/main/resources/application.yml` with your PostgreSQL credentials:
+              ```yml
+              spring:
+                datasource:
+                  driver-class-name: org.postgresql.Driver
+                  url: jdbc:postgresql://localhost:5432/car_service
+                  username: your-username
+                  password: your-password
+              ```
+
+        - **Option 2: Using Docker with PostgreSQL**
+            - Ensure Docker is running.
+            - Run PostgreSQL in a Docker container:
+              ```bash
+              docker run -d --name car-db \
+              -e POSTGRES_USER=postgres \
+              -e POSTGRES_PASSWORD=pass \
+              -e POSTGRES_DB=car_service \
+              -p 5432:5432 \
+              postgres:16
+              ```
+
+            - Update `src/main/resources/application.yml` to match Docker database credentials:
+              ```yml
+              spring:
+                datasource:
+                  driver-class-name: org.postgresql.Driver
+                  url: jdbc:postgresql://localhost:5432/car_service
+                  username: postgres
+                  password: pass
+              ```
+
+    - **Run with Maven**
+        - Install dependencies and start the application:
+          ```bash
+          # For Windows
+          mvnw.cmd install
+          mvnw.cmd spring-boot:run
+          # For Linux/MacOS
+          ./mvnw install
+          ./mvnw spring-boot:run
+          ```
 
 ## 🖱️ How to Use It?
 
@@ -158,7 +166,9 @@ For detailed guidance, refer to these resources:
 
 ### 🖱️ Testing with Swagger
 The API can be tested using the Swagger UI interface available at [http://localhost:8082/swagger-ui/index.html](http://localhost:8082/swagger-ui/index.html).
-The full API specification in JSON format is accessible at [http://localhost:8082/v3/api-docs](http://localhost:8082/v3/api-docs). The Swagger UI provides an interactive interface to explore and test all available endpoints, including those for managing cars, models, and manufacturers.
+The full API specification in JSON format is accessible at [http://localhost:8082/v3/api-docs](http://localhost:8082/v3/api-docs).
+The Swagger UI provides an interactive interface to explore and test all available endpoints, including those for
+managing cars, models, and manufacturers.
 
 For endpoints requiring authentication (POST, PATCH, DELETE), a **Bearer Access Token** is needed. To obtain the token:
 1. Use the **GET /api/v1/security-test/token** endpoint, which is publicly accessible and does not require
@@ -176,7 +186,8 @@ request, the token is automatically set in the **Authorization** header for all 
 public link, or alternatively, you can import the JSON file located in the `docs` folder at the root of the project.
 
 - **Postman Collection (Public Link)**: [link](https://serhiibohdan.postman.co/workspace/Serhii-Bohdan's-Workspace~40fc1c55-4b61-429d-88d8-160986217c44/collection/45539490-ec57e876-3e7e-4664-817a-7d0569eef1d4?action=share&creator=45539490)
-- **Postman Collection (Local)**: Import the [JSON file](docs/Car%20REST%20Service%20Collection.postman_collection.json) from the `docs` folder in the project root.
+- **Postman Collection (Local)**: Import the [JSON file](docs/Car%20REST%20Service%20Collection.postman_collection.json)
+from the `docs` folder in the project root.
 
 **Note**: Ensure the application is running locally or deployed before sending requests via Postman. If you prefer, you
 can fork the collection in Postman or use the local JSON file to customize it for your environment.
@@ -248,12 +259,20 @@ Entities and Attributes
 - **Car to Category**: Many-to-many (a car can belong to multiple categories; a category can apply to multiple
   cars). <br>
 
+## Task 4.5 Dockerization
+**Assignment:**
+
+1. [Create docker image](https://spring.io/guides/gs/spring-boot-docker) for your rest service app
+2. [Create docker-compose file](https://www.baeldung.com/spring-boot-postgresql-docker) to include all required
+infrastructure to run your service app
+
 ## Task 4.4 OpenApi V3
 **Assignment:**
 
 1. Add [SpringDocV2](https://springdoc.org/) to your project.
 2. Annotate classes with [OpenApi annotations](https://www.baeldung.com/spring-rest-openapi-documentation)
-3. [Make sure](https://stackoverflow.com/questions/59898874/enable-authorize-button-in-springdoc-openapi-ui-for-bearer-token-authentication/59898875#59898875) that generated spec includes your JWT security scheme
+3. [Make sure](https://stackoverflow.com/questions/59898874/enable-authorize-button-in-springdoc-openapi-ui-for-bearer-token-authentication/59898875#59898875)
+that generated spec includes your JWT security scheme
 4. Additionally, export and submit your latest Postman collection, put it into `docs/`
 
 ## Task 4.3 Adding Security
