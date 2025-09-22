@@ -1,9 +1,7 @@
 spring:
-
   config:
     activate:
       on-profile: test
-
   datasource:
     driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
     url: jdbc:tc:postgresql:9.6.12:///car_service_test?TC_REUSABLE=true
@@ -12,6 +10,5 @@ spring:
     hikari:
       minimum-idle: 1
       maximum-pool-size: 5
-
   flyway:
     locations: test/migration
