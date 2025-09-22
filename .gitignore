@@ -47,6 +47,3 @@ build/
 
 # Logs
 *.log
-
-# Password file
-env/password.txt
