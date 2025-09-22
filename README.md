@@ -25,10 +25,11 @@ deployment.
 ### ❓ What is Car REST Service?
 Car REST Service is a RESTful API designed to manage car-related data, providing a robust and scalable backend for
 storing, retrieving, updating, and deleting car records. The service is built to handle structured data about cars,
-their models, manufacturers, and categories, based on a provided dataset (CSV file). It serves as a foundation for
-applications requiring car data management, such as automotive catalogs, sales platforms, or inventory systems.
-The API follows REST principles, offering endpoints for basic CRUD operations with support for pagination and sorting.
-It is designed with clean code practices, leveraging Spring Boot’s ecosystem for rapid development and maintainability.
+their models, manufacturers, and categories, based on a provided dataset ([CSV file](docs/file.csv)). It serves as a
+foundation for applications requiring car data management, such as automotive catalogs, sales platforms, or inventory
+systems. The API follows REST principles, offering endpoints for basic CRUD operations with support for pagination and
+sorting. It is designed with clean code practices, leveraging Spring Boot’s ecosystem for rapid development and
+maintainability.
 
 ### 🛡️ What Problems Does It Solve?
 The service addresses key challenges in car data management by:
@@ -60,7 +61,7 @@ in a container.
 Clone the repository:
 
 ```bash
-git clone https://gitlab.com/SerhiiBohdan/car-rest-service.git
+git clone https://github.com/serhii-bohdan/car-rest-service.git
 cd car-rest-service
 ```
 
@@ -126,11 +127,11 @@ cd car-rest-service
         - Install dependencies and start the application:
           ```bash
           # For Windows
-          mvnw.cmd install
-          mvnw.cmd spring-boot:run
+          mvnw.cmd package -DskipTests
+          java -jar target/car-rest-service-1.0.0.jar
           # For Linux/MacOS
-          ./mvnw install
-          ./mvnw spring-boot:run
+          ./mvnw package -DskipTests
+          java -jar target/car-rest-service-1.0.0.jar
           ```
 
 ## 🖱️ How to Use It?
@@ -258,68 +259,3 @@ Entities and Attributes
 - **Model to Manufacturer**: Many-to-one (each model has one manufacturer; a manufacturer can have many models).
 - **Car to Category**: Many-to-many (a car can belong to multiple categories; a category can apply to multiple
   cars). <br>
-
-## Task 4.5 Dockerization
-**Assignment:**
-
-1. [Create docker image](https://spring.io/guides/gs/spring-boot-docker) for your rest service app
-2. [Create docker-compose file](https://www.baeldung.com/spring-boot-postgresql-docker) to include all required
-infrastructure to run your service app
-
-## Task 4.4 OpenApi V3
-**Assignment:**
-
-1. Add [SpringDocV2](https://springdoc.org/) to your project.
-2. Annotate classes with [OpenApi annotations](https://www.baeldung.com/spring-rest-openapi-documentation)
-3. [Make sure](https://stackoverflow.com/questions/59898874/enable-authorize-button-in-springdoc-openapi-ui-for-bearer-token-authentication/59898875#59898875)
-that generated spec includes your JWT security scheme
-4. Additionally, export and submit your latest Postman collection, put it into `docs/`
-
-## Task 4.3 Adding Security
-**Assignment:**
-
-Add security to your service, so that
-- GET requests accessible for all users
-- POST requests - only authorized users.
-
-Consult with mentor and secure your create/update/delete endpoints with Auth0 or KeyCloak
-
-- Follow tutorial to secure your endpoints with Auth0
-- Follow tutorial to secure your endpoints with KeyCloak
-
-## Task 4.2 Create RestApi endpoints
-**Assignment:**
-
-1. Create new Spring Boot project using [Initializer](https://start.spring.io/) with dependencies:
-
-- **Spring Web** (Build web, including RESTful, applications using Spring MVC. Uses Apache Tomcat as the default
-  embedded container.)
-- **Spring Data JPA** (Persist data in SQL stores with Java Persistence API using Spring Data and Hibernate.)
-- **Flyway Migration** (Version control for your database so you can migrate from any version (incl. an empty database)
-  to the latest version of the schema.)
-- **H2 Database** or **PostgreSQL** Driver of your choice
-
-2. Create model and schema initializing SQL migration script according to your UML diagram
-3. Create JPA repositories and service layer with base CRUD operations
-4. Following best practices on RestAPI design - implement required endpoints to manage API model
-    - Implement create/update/list/delete operations for provided data
-        - manufacturers
-        - manufacturers/model
-        - manufacturers/model/year <br>
-          ex: `POST /api/v1/manufacturers/toyota/models/corolla/2001`
-    - Implement search endpoint with parameters like `manufacturer`, `model`, `minYear`, `maxYear`, `category` <br>
-      ex: `GET /api/v1/cars?manufacturer=mercedes&minYear=2005`
-    - All list endpoints should support pagination and sorting
-5. Cover controllers with tests
-6. Add additional components tests if required
-
-## Task 4.1 Planning: Car Database
-**Important:** In the next series of tasks you're going to develop Car Database microservice with rest API, make sure to
-give repo a meaningful name (ex. **car-rest-service**)
-
-**Assignment** <br>
-Analyze and decompose Car DB Reset service  (create UML class diagram for application) based on attached csv data. <br>
-
-- Decompose provided data into db entities
-
-[📄 file.csv](docs/file.csv)
