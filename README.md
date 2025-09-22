@@ -127,11 +127,11 @@ cd car-rest-service
         - Install dependencies and start the application:
           ```bash
           # For Windows
-          mvnw.cmd install
-          mvnw.cmd spring-boot:run
+          mvnw.cmd package -DskipTests
+          java -jar target/car-rest-service-1.0.0.jar
           # For Linux/MacOS
-          ./mvnw install
-          ./mvnw spring-boot:run
+          ./mvnw package -DskipTests
+          java -jar target/car-rest-service-1.0.0.jar
           ```
 
 ## 🖱️ How to Use It?
